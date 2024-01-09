@@ -3,7 +3,8 @@ import NextAuth, { DefaultSession } from "next-auth";
 import { JWT } from "@auth/core/jwt";
 
 export type ExtendedUser = DefaultSession["user"] & {
-  role: e;
+  role: UserRole;
+  isTwoFactorEnabled: boolean;
 };
 
 declare module "next-auth" {
