@@ -1,21 +1,36 @@
 "use client";
+
+import { admin } from "@/actions/admin";
 import { FormSuccess } from "@/components/FormSuccess";
 import RoleGate from "@/components/auth/RoleGate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useCurrentRole } from "@/hooks/use-current-role";
 import { UserRole } from "@prisma/client";
 import React from "react";
+import { toast } from "sonner";
 
 const AdminPage: React.FC = () => {
-  const role = useCurrentRole();
+  // const role = useCurrentRole();
+
+  const onServerClick = () => {
+    admin()
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error);
+        }
+        if (data.success) {
+          toast.error(data.success);
+        }
+      })
+      .catch(() => toast.error("Someting Went Wrong"));
+  };
 
   const onApiRouteClick = () => {
     fetch("/api/admin").then((response) => {
       if (response.ok) {
-        console.log("OKAY");
+        toast.success("allowed API routes");
       } else {
-        console.error("FORBIDDEN");
+        toast.error("FORBIDDEN API routes");
       }
     });
   };
@@ -36,7 +51,7 @@ const AdminPage: React.FC = () => {
 
         <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-md">
           <p className="text-sm font-medium">Admin-only Server Action</p>
-          <Button>Click to test</Button>
+          <Button onClick={onServerClick}>Click to test</Button>
         </div>
       </CardContent>
     </Card>
